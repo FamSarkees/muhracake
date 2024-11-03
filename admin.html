@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - MUHRA Cake</title>
+    <link rel="stylesheet" href="admin.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+        .dashboard-container {
+            display: flex;
+        }
+        .sidebar {
+            width: 200px;
+            height: auto;
+            min-height: 100vh;
+            background-color: #343a40;
+            color: white;
+            padding: 15px;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin: 10px 0;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section h2 {
+            margin-top: 0;
+        }
+        .order-table {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #343a40;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        button {
+            margin-right: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        img {
+            width: 50px; /* حجم الصورة المعروضة */
+            height: 50px; /* حجم الصورة المعروضة */
+            object-fit: cover; /* ملاءمة الصورة داخل المساحة المحددة */
+        }
+        /* تصميم نافذة العرض */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px; 
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Admin Dashboard - MUHRA Cake</h1>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="#" onclick="showSection('productManagement')">Manage Products</a></li>
+                <li><a href="#" onclick="showSection('orderManagement')">Manage Orders</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section id="productManagement" class="content-section">
+                <h2>Manage Products</h2>
+                <div class="form-frame">
+                    <form id="productForm">
+                        <input type="text" id="productName" placeholder="Product Name" required>
+                        <input type="text" id="productDescription" placeholder="Description" required>
+                        <input type="number" id="productPrice" placeholder="Price" required>
+                        <input type="number" id="productDiscount" placeholder="Discount (%)" min="0" max="100">
+                        <input type="file" id="productImage" accept="image/*" required>
+                        <button type="submit">Add Product</button>
+                    </form>
+                </div>
+
+                <div id="productList" class="list-frame"></div>
+            </section>
+
+            <section id="orderManagement" class="content-section" style="display: none;">
+                <h2>Manage Orders</h2>
+                <div class="order-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Customer Name</th>
+                                <th>Phone Number</th>
+                                <th>Total Price</th>
+                                <th>Status</th>
+                                <th>Image</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderList"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Order Details</h2>
+            <div id="modalBody"></div>
+            <button id="downloadBtn" onclick="downloadPDF()">Download as PDF</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Muhra Cake. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+
+            if (sectionId === 'orderManagement') {
+                displayOrders();
+            }
+        }
+
+        const displayProducts = () => {
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            const productContainer = document.getElementById('productList');
+            productContainer.innerHTML = '';
+
+            products.forEach((product, index) => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product';
+
+                const productImage = document.createElement('img');
+                productImage.src = product.image;
+                productImage.alt = product.name;
+
+                const productName = document.createElement('h2');
+                productName.textContent = product.name;
+
+                const productDescription = document.createElement('p');
+                productDescription.textContent = product.description;
+
+                const productPrice = document.createElement('p');
+                if (product.discount > 0) {
+                    const oldPrice = document.createElement('span');
+                    oldPrice.textContent = `${product.price} LE`;
+                    oldPrice.className = 'old-price';
+                    productPrice.appendChild(oldPrice);
+
+                    const newPrice = document.createElement('strong');
+                    newPrice.textContent = `${(product.price - (product.price * product.discount / 100)).toFixed(2)} LE`;
+                    productPrice.appendChild(newPrice);
+                } else {
+                    const normalPrice = document.createElement('strong');
+                    normalPrice.textContent = `${product.price} LE`;
+                    productPrice.appendChild(normalPrice);
+                }
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteProduct(index);
+
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.onclick = () => editProduct(index);
+
+                productDiv.appendChild(productImage);
+                productDiv.appendChild(productName);
+                productDiv.appendChild(productDescription);
+                productDiv.appendChild(productPrice);
+                productDiv.appendChild(editButton);
+                productDiv.appendChild(deleteButton);
+                productContainer.appendChild(productDiv);
+            });
+        };
+
+        document.getElementById('productForm').onsubmit = (event) => {
+            event.preventDefault();
+            const name = document.getElementById('productName').value;
+            const description = document.getElementById('productDescription').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const discount = parseFloat(document.getElementById('productDiscount').value) || 0;
+            const image = document.getElementById('productImage').files[0];
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const newProduct = {
+                    name,
+                    description,
+                    price,
+                    discount,
+                    image: e.target.result
+                };
+
+                const products = JSON.parse(localStorage.getItem('products')) || [];
+                products.push(newProduct);
+                localStorage.setItem('products', JSON.stringify(products));
+                displayProducts();
+                document.getElementById('productForm').reset();
+            };
+            reader.readAsDataURL(image);
+        };
+
+        const deleteProduct = (index) => {
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            products.splice(index, 1);
+            localStorage.setItem('products', JSON.stringify(products));
+            displayProducts();
+        };
+
+        const editProduct = (index) => {
+            const products = JSON.parse(localStorage.getItem('products')) || [];
+            const product = products[index];
+
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productDescription').value = product.description;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productDiscount').value = product.discount;
+
+            // remove the product for editing
+            deleteProduct(index);
+        };
+
+        const displayOrders = () => {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const orderListTable = document.getElementById('orderList');
+            orderListTable.innerHTML = '';
+
+            orders.forEach((order, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${order.name || 'غير متاح'}</td>
+                    <td>${order.phone || 'غير متاح'}</td>
+                    <td>${order.priceTotal || 'غير متاح'} </td>
+                    <td>
+                        <select onchange="updateOrderStatus(${index}, this.value)">
+                            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                            <option value="in progress" ${order.status === 'in progress' ? 'selected' : ''}>In Progress</option>
+                            <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Completed</option>
+                        </select>
+                    </td>
+                    <td><img src="${order.image}" alt="Order Image" /></td>
+                    <td>
+                        <button onclick="viewOrder(${index})">View</button>
+                        <button onclick="deleteOrder(${index})">Delete</button>
+                    </td>
+                `;
+                orderListTable.appendChild(row);
+            });
+        };
+
+        const updateOrderStatus = (index, status) => {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            orders[index].status = status;
+            localStorage.setItem('orders', JSON.stringify(orders));
+        };
+
+        let currentOrderIndex = null; // متغير لتخزين مؤشر الطلب الحالي
+
+const viewOrder = (index) => {
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    const order = orders[index];
+    currentOrderIndex = index; // حفظ مؤشر الطلب الحالي
+    const modalBody = document.getElementById('modalBody');
+
+    modalBody.innerHTML = `
+        <p><strong>Order Number:</strong> ${index + 1}</p>
+        <p><strong>Customer Name:</strong> ${order.name || 'غير متاح'}</p>
+        <p><strong>Phone Number:</strong> ${order.phone || 'غير متاح'}</p>
+        <p><strong>Total Price:</strong> ${order.priceTotal || 'غير متاح'}</p>
+        <p><strong>Status:</strong> ${order.status || 'غير متاح'}</p>
+        <img src="${order.image}" alt="Order Image" style="width: 200px;" />
+    `;
+    document.getElementById('orderModal').style.display = "block";
+};
+
+const downloadPDF = () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.text("Order Details", 10, 10);
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            let content = orders.map((order, index) => {
+                return `Order #${index + 1}:
+                Customer Name: ${order.name || 'غير متاح'}
+                Phone Number: ${order.phone || 'غير متاح'}
+                Total Price: ${order.priceTotal || 'غير متاح'}
+                Status: ${order.status || 'غير متاح'}
+                Image: ${order.image || 'غير متاح'}
+                `
+            }).join("\n\n");
+
+            doc.text(content, 10, 20);
+            doc.save("orders.pdf");
+        };
+
+        const closeModal = () => {
+            document.getElementById('orderModal').style.display = "none";
+        };
+
+        const deleteOrder = (index) => {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            orders.splice(index, 1);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            displayOrders(); // إعادة عرض الطلبات بعد الحذف
+        };
+
+       
+
+        // عند تحميل الصفحة، عرض المنتجات والطلبات
+        window.onload = () => {
+            displayProducts();
+            displayOrders();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,634 @@
+/* تنسيق الصفحة العامة */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: E9967A; /* خلفية داكنة */
+}
+body {
+    overflow-x: hidden; /* يمنع التمرير الأفقي بشكل كامل */
+}
+
+
+/* تنسيق الهيدر */
+header {
+    background-color: rgba(255, 143, 143, 0.8); /* خلفية شفافة وردية */
+    color: #ffffff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;   
+    width: auto;
+    height: 60px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.houseshape {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    
+}
+
+
+
+.wall {
+    background-color: #333333; /* لون رمادي داكن للجدران */
+    width: 30px;
+    height: 20px;
+    position: absolute;
+    top: 30px;
+    left: 5px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent; /* خلفية شفافة */
+    border: 2px solid #333333; /* إطار رمادي */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333333; /* لون داكن للنص */
+    transition: all 0.3s ease;
+}
+
+.icon:hover {
+    color: #555555; /* لون داكن أكثر عند التمرير */
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+footer{
+    text-align: center;
+    padding: 20px;
+    background-color:#ff6b6b; 
+    color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: auto;
+    height:30px;
+    margin-top: 50px; /* مسافة بين الفوتر وقسم المنتجات */
+    z-index: 1
+}
+
+    .icon {
+        position: relative;
+        left: 20px;
+    }
+
+    header {
+        height: 35px;
+        position: fixed;
+        bottom: 0px;
+        width: 100%; 
+        z-index: 1;
+    }
+
+.homeicon {
+    position: relative;
+    right:50px;
+    display: inline-block;
+    cursor: pointer;  
+    width: 30px;
+    height: 30px;
+    transition: transform 0.2s;
+    border-radius: 50%;
+    border: 2px solid #333333; /* إطار رمادي */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333333; /* لون داكن للنص داخل السهم */
+}
+.homeicon:hover {
+    transform: scale(1.1);
+    color: #555555; /* تغيير لون النص عند التمرير */
+}
+
+.houseshape {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    
+}
+
+.roof {
+    border-left: 10px solid transparent;  
+    border-right: 10px solid transparent;  
+    border-bottom: 10px solid #333333;  /* لون رمادي داكن للجزء العلوي */
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top: 10px;
+    left:5px;
+}
+
+.wall {
+    background-color: #333333; /* لون رمادي داكن للجدران */
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 30px;
+    left: 50px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 5px;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: transparent; /* خلفية شفافة */
+    border: 2px solid #333333; /* إطار رمادي */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333333; /* لون داكن للنص */
+    transition: all 0.3s ease;
+}
+
+.icon:hover {
+    color: #555555; /* لون داكن أكثر عند التمرير */
+    transform: scale(1.1);
+}
+
+
+
+
+footer{
+    text-align: center;
+    padding: 20px;
+    background-color:#ff6b6b; 
+    color: #fff;
+    position: relative;
+    bottom: 0;
+    width: auto;
+    height:30px;
+    margin-top: 50px; /* مسافة بين الفوتر وقسم المنتجات */
+    z-index: 1}
+ }
+
+
+/* إضافة أيقونات فيسبوك وواتساب وإنستجرام */
+.icon.facebook::before {
+  content: "F"; /* Placeholder للأيقونة */
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+}
+
+.icon.whatsapp::before {
+  content: "W";
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+}
+
+.icon.instagram::before {
+  content: "I";
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+}
+
+.header-image {
+    position: absolute; /* يجعل الصورة تتحرك بحرية داخل الـ header */
+    top: 7%; /* لتحريك الصورة لأعلى */
+    left: 7%; /* لتحريك الصورة لليسار */
+    width: 150px; /* حجم الصورة */
+    height: 150px; /* الحفاظ على نسبة العرض إلى الارتفاع */
+    transform: translate(-50%, -50%); /* مركز الصورة داخل الـ header */
+}
+.logo h1 {
+    margin: 0;
+    font-weight: bold; /* زيادة الوزن لزيادة الفخامة */
+}
+
+/* قائمة التنقل */
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 5px;
+position:relative;
+right: 30px;
+}
+
+nav ul li a {
+    color: black; /* لون ذهبي */
+    text-decoration: none;
+    font-weight: bold; /* زيادة الوزن لزيادة الفخامة */
+}
+
+/* تنسيق قسم الهير */
+.hero {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #ebe6dc; /* خلفية فاتحة */
+    color: #4d4d4d; /* لون ذهبي */
+}
+
+.hero h2 {
+    font-size: 2.5em;
+    margin: 0;
+}
+
+.hero p {
+    font-size: 1.2em;
+}
+
+/* زر التسوق */
+.btn {
+   background-color: #d4af37;
+    color: #f7f4e9; /* لون داكن جداً */
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+     background-color: #c8a227;/* لون ذهبي أغمق */
+}
+
+/* زر Add to Cart */
+.addButton {
+     background-color: #ebe6dc;
+    color: #d4af37; /* لون ذهبي */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: background-color 0.3s;
+}
+
+.add-to-cart:hover {
+    babackground-color: #e0d9c9; /* لون بني داكن */
+}
+
+/* تنسيق قسم المنتجات */
+.products {
+    padding: 10px;
+    margin-bottom: 60px; /* مسافة إضافية بين المنتجات والفوتر */
+}
+
+.products h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    margin: 5px;
+    color: #d4af37; /* لون ذهبي */
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding-left: 30px; /* مسافة إضافية من ناحية الشمال */
+}
+
+.product {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    width: 70%; /* تقليل حجم المنتج */
+    height: auto;
+    margin: 5px; /* تقليل المسافة بين المنتجات */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 20px;
+    padding-bottom: 5px; /* مسافة أسفل المنتج للزر */
+    position: relative;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    background-color: #F5F5DC; 
+}
+
+.product:hover {
+    transition: transform 0.3s;
+    transform: scale(1.05);
+}
+
+.product h3, .product p {
+    position: relative;    
+    bottom: 30px; /* تقليل المسافة بين النصوص */
+    color: #4d4d4d;
+}
+
+.product-price, .old-price {
+    position: relative;    
+    bottom: 10px; /* تقليل المسافة بين النصوص */
+    color: #DC143C;
+}
+
+/* إضافة سطر جديد بين السعر القديم والجديد */
+.product-price::before {
+    content: "";
+    display: block; /* اجعل السطر الجديد ككتلة */
+    margin: 5px 0; /* إضافة مسافة فوق وتحت السطر */
+
+}
+
+
+.product-image {
+    width: 100%;
+    max-height: 220px; /* تصغير الصورة قليلاً */
+    border-radius: 20px;
+    position: relative;
+}
+
+/* لافتة الخصم */
+.discount-banner {
+    background-color: red;
+    color: #fff;
+    padding: 5px 8px; /* زيادة الحشوة العمودية والأفقية */
+    border-radius: 8px; /* زيادة انحناء الزوايا */
+    position: absolute;
+    top: 3px; /* تغيير المكان من الأعلى */
+    left: 0px; /* مكانه من اليسار */
+    transform: rotate(-30deg);
+    font-weight: bold;
+    z-index: 1;
+    font-size: 1.2em; /* زيادة حجم الخط */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3); /* إضافة ظل */
+}
+
+
+/* تنسيق الأسعار */
+.old-price {
+    text-decoration: line-through;
+     
+    margin-right: 5px;
+}
+
+.product-price {
+    text-align: center;
+    font-weight: bold;
+    color: #DC143C; /* لون ذهبي */
+}
+
+/* تنسيق الفوتر */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color:#ff6b6b; 
+    color: #fff;
+    position: relative;
+    bottom: 0;
+    width: auto;
+    margin-top: 50px; /* مسافة بين الفوتر وقسم المنتجات */
+}
+
+/* تنسيق إطار "اعملوا أوردر على مزاجك" */
+.custom-order {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    width: 150px; /* عرض المنتج */
+    height: 350px;
+    margin: 30px; /* تقليل المسافة بين المنتجات */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 20px;
+    padding-bottom: 5px; /* مسافة أسفل المنتج للزر */
+    position: relative;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    background-color: #F5F5DC; /* لون رمادي داكن */
+}
+
+.custom-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ffcc00; /* لون ذهبي */
+    color: #1a1a1a; /* لون داكن جداً */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    margin-top: 140px; /* تعديل المسافة إلى 60px */
+    cursor: pointer;
+}
+
+/* تنسيق كلمة "على مزاجك" */
+.custom-order-text {
+    font-weight: bold; /* جعل النص بالخط العريض */
+    margin-top: 10px; /* وضع المسافة أسفل الدائرة */
+}
+.p_words{
+    font-weight: bold; /* جعل النص بالخط العريض */
+    margin-top: 50px; 
+}
+
+
+  /* إخفاء المودال بشكل افتراضي */
+        #orderModal {
+            display: none; /* إخفاء المودال بشكل افتراضي */
+            position: fixed;
+            z-index: 1001; /* فوق صفحة التحميل */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* تمكين التمرير إذا كانت المحتويات أكبر من النافذة */
+            background-color: rgb(0,0,0); /* لون الخلفية */
+            background-color: rgba(0,0,0,0.4); /* لون الخلفية مع الشفافية */
+        }
+
+
+       
+/* تنسيق المودال */
+        .modal {
+            display: none; /* مخفي بشكل افتراضي */
+            position: fixed; 
+            z-index: 1001; /* فوق صفحة التحميل */
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.5); /* خلفية مظللة */
+            display: flex; /* استخدام flexbox */
+            justify-content: center; /* مركز العمود */
+            align-items: center; /* مركز الصف */
+        }
+
+      /* تنسيق المودال */
+.modal-content {
+    background-color: #fff; /* خلفية بيضاء */
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: auto; 
+    max-width: 400px; /* أقصى عرض للمودال */
+    max-height: 80%; /* أقصى ارتفاع للمودال */
+    overflow-y: auto; /* تمكين التمرير داخل المودال إذا كانت المحتويات أكبر */
+    position: relative; /* لإضافة خصائص التمرير */
+    margin: auto; /* المركز */
+    top: 50%; /* تحريك المودال لمنتصف الشاشة عمودياً */
+    transform: translateY(-50%); /* محاذاة عمودية صحيحة */
+}
+
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* تنسيق الحقول داخل النموذج */
+        input[type="text"],
+        input[type="tel"],
+        textarea {
+            width: 100%; /* عرض كامل */
+            padding: 10px; 
+            margin: 10px 0; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            box-sizing: border-box; 
+        }
+
+        /* تنسيق زر إرسال النموذج */
+        button {
+            background-color: white; 
+            color: red; 
+            padding: 15px 15px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-weight: bold;
+            transition: background-color 0.3s; 
+        }
+
+        button:hover {
+            background-color: gray; 
+        }
+ 
+ background-color: #fefefe;
+            margin:  auto; /* 15% من الأعلى */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* عرض 80% */
+}
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+ .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+/* تنسيق الحقول داخل النموذج */
+input[type="text"],
+input[type="tel"],
+input[type="range"],
+textarea {
+    width: 100%; /* عرض كامل */
+    padding: 10px; /* مسافة داخلية */
+    margin: 10px 0; /* مسافة بين الحقول */
+    border: 1px solid #ccc; /* حد رمادي */
+    border-radius: 5px; /* زوايا دائرية */
+    box-sizing: border-box; /* لتضمين padding و border في العرض */
+}
+
+/* تنسيق زر إرسال النموذج */
+.submit-btn {
+    background-color: #1a1a1a; /* لون داكن جداً */
+    color: #ffcc00; /* لون ذهبي */
+    padding: 10px 15px; /* مسافة داخلية */
+    border: none; /* إزالة الحد */
+    border-radius: 5px; /* زوايا دائرية */
+    cursor: pointer; /* شكل المؤشر */
+    transition: background-color 0.3s; /* تأثير عند التحويم */
+}
+
+.submit-btn:hover {
+    background-color: #333; /* لون بني داكن */
+}
+
+/* تغيير حجم الموقع حسب حجم الشاشة */
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr); /* عمودين على الشاشات الصغيرة */
+    }
+}
+
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr; /* عمود واحد على الشاشات الصغيرة جداً */
+    }
+}
+.cart {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.4); /* خلفية شفافة */
+    color: #d4af37;
+    padding: 10px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+
+#cart-count {
+    position: relative;
+    top: -10px;
+    right: -10px;
+    background-color: #d4af37;
+    color: #ff3333;
+    padding: 5px;
+    border-radius: 50%;
+    font-size: 14px;
+}
+
+/* تحسين السلة على الشاشات الصغيرة */
+@media (max-width: 768px) {
+    .cart {
+        width: 40px;
+        height: 40px;
+        position: fixed;
+        bottom: 90px;
+
+    }
+
+    .cart img {
+        width: 25px;
+    }
+
+    #cart-count {
+        font-size: 12px;
+    }
+}

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muhra Cake</title>
+    <link rel="icon" href="path_to_logo.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+
+html, body {
+    overflow-x: hidden; /* يمنع التمرير الأفقي بشكل كامل */
+}
+
+        /* التنسيقات هنا... */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #ffcc00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            z-index: 1000;
+        } 
+        /* تنسيق صورة المنتج عند الضغط عليها */
+        .product-image {
+            cursor: pointer; /* تغيير شكل المؤشر عند تمرير الفأرة */
+        }
+        .image-modal {
+            display: none; /* إخفاء الصورة في البداية */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+        .image-modal img {
+            max-width: 80%;
+            max-height: 80%;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <img src="https://github.com/FamSarkees/muhracake/blob/main/Logo/muhra.png" alt="Logo">
+    </div>
+    <header>
+        <div></div>
+        <img src="https://github.com/FamSarkees/muhracake/blob/main/Logo/mc.png" alt="Header Image" class="header-image">
+        <div class="social-icons">
+            <a href="https://facebook.com" target="_blank" class="icon facebook"></a>
+            <a href="https://wa.me/your-number" target="_blank" class="icon whatsapp"></a>
+            <a href="https://instagram.com" target="_blank" class="icon instagram"></a>
+        </div>
+
+        <a href="#" class="homeicon" title="home page">
+            <div class="houseshape">
+                <div class="roof"></div>
+                <div class="walls"> </div>  
+            </div>
+        </a>
+    </header>
+
+    <div class="cart" id="cart">
+        🛒
+        <span id="cart-count">0</span>
+    </div>
+
+    <section class="hero">
+        <h2>Welcome to Muhra Cake</h2>
+        <p>Where every slice brings a smile!</p>
+        <a href="#" class="btn">Shop Now</a>
+    </section>
+
+    <section class="products">
+        <h3>Our Best Cakes</h3>
+        <div class="product-grid" id="productList"></div>
+
+        <div class="product custom-order" id="customOrder">
+            <div class="custom-circle"><span>+</span></div>
+            <p class="p_words">على مزاجك</p>
+        </div>
+    </section>
+
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>طلب مخصص</h2>
+            <div class="cart-products" id="cartProductsList"></div>
+            <form id="orderForm">
+                <label for="name">الاسم:</label>
+                <input type="text" id="name" required>
+                <label for="phone">رقم التليفون:</label>
+                <input type="tel" id="phone" required>
+                <label for="mobile">رقم الموبايل:</label>
+                <input type="tel" id="mobile" required>
+                <label for="address">العنوان:</label>
+                <input type="text" id="address" required>
+                <label for="notes">ملاحظات:</label>
+                <textarea id="notes" rows="4"></textarea>
+                <label for="priceTotal">مجموع الأسعار:</label>
+                <input type="text" id="priceTotal" readonly>
+                <label for="imageUpload">رفع صورة:</label>
+                <input type="file" id="imageUpload" accept="image/*">
+                <button type="submit">إرسال الطلب</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="image-modal" id="imageModal" onclick="closeImageModal()">
+        <img id="modalImage" src="" alt="Product Image">
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Muhra Cake. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const productList = JSON.parse(localStorage.getItem('products')) || [];
+        let cartCount = 0;
+        const cartProducts = [];
+
+        const displayProducts = () => {
+            const productContainer = document.getElementById('productList');
+            productContainer.innerHTML = '';
+
+            productList.forEach(product => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product';
+
+                const productImage = document.createElement('img');
+                productImage.src = product.image; 
+                productImage.alt = product.name;
+                productImage.className = 'product-image';
+                productImage.onclick = () => openImageModal(product.image); // إضافة وظيفة لفتح الصورة
+
+                const productName = document.createElement('h2');
+                productName.textContent = product.name;
+
+                const productDescription = document.createElement('p');
+                productDescription.textContent = product.description;
+
+                const productPrice = document.createElement('p');
+                let price = product.price;
+
+                if (product.discount > 0) {
+                    const oldPrice = document.createElement('span');
+                    oldPrice.textContent = `${price} LE`;
+                    oldPrice.className = 'old-price';
+                    productPrice.appendChild(oldPrice);
+                    price -= (price * product.discount / 100);
+
+                    const discountBanner = document.createElement('span');
+                    discountBanner.textContent = ` ${product.discount}%`;
+                    discountBanner.className = 'discount-banner';
+                    productDiv.appendChild(discountBanner);
+                }
+                
+                const newPrice = document.createElement('strong');
+                newPrice.className = 'product-price';
+                newPrice.textContent = `${price.toFixed(2)} LE`;
+                productPrice.appendChild(newPrice);
+
+                const addButton = document.createElement('button');
+                addButton.className = 'addButton';
+                addButton.textContent = 'Add to Cart';
+                addButton.onclick = () => addToCart(product);
+
+                productDiv.appendChild(productImage);
+                productDiv.appendChild(productName);
+                productDiv.appendChild(productDescription);
+                productDiv.appendChild(productPrice);
+                productDiv.appendChild(addButton);
+                productContainer.appendChild(productDiv);
+            });
+        };
+
+        const addToCart = (product) => {
+            let price = product.price; // السعر الأصلي
+
+            // إذا كان هناك خصم، قم بحسابه
+            if (product.discount > 0) {
+                price -= (price * product.discount / 100); // حساب السعر بعد الخصم
+            }
+
+            cartCount++;
+            document.getElementById('cart-count').textContent = cartCount;
+            // أضف المنتج إلى السلة مع السعر بعد الخصم
+            cartProducts.push({ ...product, price }); // إضافة السعر بعد الخصم
+            updateCartProductsList();
+            updatePriceTotal();
+        };
+
+        const updateCartProductsList = () => {
+            const cartProductsList = document.getElementById('cartProductsList');
+            cartProductsList.innerHTML = '';
+
+            cartProducts.forEach((product, index) => {
+                const productItem = document.createElement('div');
+                productItem.textContent = product.name;
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'X';
+                removeButton.onclick = () => removeFromCart(index);
+
+                productItem.appendChild(removeButton);
+                cartProductsList.appendChild(productItem);
+            });
+        };
+
+        const removeFromCart = (index) => {
+            cartProducts.splice(index, 1);
+            cartCount--;
+            document.getElementById('cart-count').textContent = cartCount;
+            updateCartProductsList();
+            updatePriceTotal();
+        };
+
+        const updatePriceTotal = () => {
+            const total = cartProducts.reduce((sum, product) => sum + product.price, 0);
+            document.getElementById('priceTotal').value = `${total.toFixed(2)} LE`;
+        };
+
+        const modal = document.getElementById("orderModal");
+        const closeButton = document.getElementsByClassName("close")[0];
+
+        document.querySelector('.custom-order').onclick = function() {
+            modal.style.display = "flex";
+        }
+
+        closeButton.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        document.getElementById("orderForm").onsubmit = function(event) {
+            event.preventDefault();
+            // التعامل مع الطلب
+            alert("طلبك تم استلامه!");
+            cartProducts.length = 0; // تفريغ السلة
+            cartCount = 0;
+            document.getElementById('cart-count').textContent = cartCount;
+            updateCartProductsList();
+            document.getElementById("orderForm").reset();
+            document.getElementById('priceTotal').value = '';
+            modal.style.display = "none"; // إغلاق المودال
+        }
+
+        const openImageModal = (imageSrc) => {
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = imageSrc;
+            document.getElementById('imageModal').style.display = 'flex';
+        }
+
+        const closeImageModal = () => {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // إغلاق الصورة عند الضغط على أي مكان
+        window.onclick = (event) => {
+            const imageModal = document.getElementById('imageModal');
+            if (event.target == imageModal) {
+                closeImageModal();
+            } else if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                displayProducts(); // عرض المنتجات بعد التحميل
+            }, 2000);
+        }
+ document.getElementById('cart').onclick = function() {
+            modal.style.display = "flex";
+        }
+    </script>
+</body>
+</html>

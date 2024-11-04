@@ -1,4 +1,17 @@
 /* تنسيق الصفحة العامة */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body {
+    min-height: 100vh;
+}
+
+* {
+    box-sizing: border-box;
+}
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;

@@ -1,16 +1,24 @@
 /* تنسيق الصفحة العامة */
+/* تثبيت الهيدر أسفل الشاشة */
+header {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* خلي الهيدر ورا الفوتر */
+}
+
+/* خليه يكون في الخلف لما نوصله */
+footer {
+    position: relative;
+    z-index: 20; /* الفوتر يغطي الهيدر */
+}
+
+/* للتأكد أن الصفحة ما فيهاش سكرول إضافي */
 html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-}
-
-body {
-    min-height: 100vh;
-}
-
-* {
-    box-sizing: border-box;
 }
 body {
     font-family: 'Arial', sans-serif;
